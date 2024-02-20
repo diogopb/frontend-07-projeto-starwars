@@ -4,6 +4,8 @@ import { PlanetType } from '../utils/types';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [dataApi, setDataApi] = useState<PlanetType[]>([]);
+  const [search, setSearch] = useState('');
+  const [searched, setSearched] = useState<PlanetType[]>([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -16,11 +18,17 @@ function Provider({ children }: { children: React.ReactNode }) {
       });
       setDataApi(planets);
     };
+    const planetSearched = () => {
+      const newData = dataApi.filter((planet) => planet.name
+        .includes(search.toLowerCase()));
+      setSearched(newData);
+    };
     fetchApi();
-  }, []);
+    planetSearched();
+  }, [dataApi, search]);
 
   return (
-    <Context.Provider value={ { data: dataApi } }>
+    <Context.Provider value={ { data: dataApi, setSearch, searched } }>
       {children}
     </Context.Provider>
   );
