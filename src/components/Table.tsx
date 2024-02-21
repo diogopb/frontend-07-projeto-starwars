@@ -8,10 +8,12 @@ function Table() {
     searched,
     columns,
     selectedColumn,
+    setSelectedColumn,
     comparisons,
+    setComparisons,
     comparisonsValue,
-    handleComparisons,
-    handleOptions } = useContext(context);
+    setComparisonsValue,
+    handleComparisons } = useContext(context);
   const options = ['maior que', 'menor que', 'igual a'];
 
   if (data.length === 0) {
@@ -32,7 +34,7 @@ function Table() {
           name="column"
           data-testid="column-filter"
           value={ selectedColumn }
-          onChange={ ({ target }) => handleOptions(target) }
+          onChange={ (e) => setSelectedColumn(e.target.value) }
         >
           {columns.map((column: any) => (
             <option key={ column }>{column}</option>
@@ -44,7 +46,7 @@ function Table() {
           name="comparison"
           data-testid="comparison-filter"
           value={ comparisons }
-          onChange={ (e) => handleOptions(e) }
+          onChange={ (e) => setComparisons(e.target.value) }
         >
           {options.map((option) => (
             <option key={ option }>{option}</option>
@@ -56,7 +58,7 @@ function Table() {
           name="value"
           data-testid="value-filter"
           value={ comparisonsValue }
-          onChange={ (e) => handleOptions(e) }
+          onChange={ (e) => setComparisonsValue(e.target.value) }
         />
 
         <button

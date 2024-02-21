@@ -68,17 +68,6 @@ function Provider({ children }: { children: React.ReactNode }) {
     handleColumns();
   };
 
-  const handleOptions = (target: any) => {
-    console.log(target);
-    if (target.name === 'column') {
-      setSelectedColumn(target.value);
-    } else if (target.name === 'comparison') {
-      setComparisons(target.value);
-    } else {
-      setComparisonsValue(target.value);
-    }
-  };
-
   const contextValue = {
     data,
     setData,
@@ -96,7 +85,6 @@ function Provider({ children }: { children: React.ReactNode }) {
     setComparisonsValue,
     handleColumns,
     handleComparisons,
-    handleOptions,
   };
 
   return (
