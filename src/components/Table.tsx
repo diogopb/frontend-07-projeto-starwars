@@ -28,6 +28,7 @@ function Table() {
 
   return (
     <div>
+      <h1>StarWars</h1>
       <div>
         <label htmlFor="column">Coluna</label>
         <select
