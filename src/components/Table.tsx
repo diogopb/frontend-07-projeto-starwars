@@ -13,7 +13,11 @@ function Table() {
     setComparisons,
     comparisonsValue,
     setComparisonsValue,
-    handleComparisons } = useContext(context);
+    handleComparisons,
+    filters,
+    handleRemoveFilter,
+    handleRemoveAllFilters,
+  } = useContext(context);
   const options = ['maior que', 'menor que', 'igual a'];
 
   if (data.length === 0) {
@@ -68,6 +72,28 @@ function Table() {
         >
           Filter
         </button>
+
+        {filters.map((filter: any) => (
+          <div data-testid="filter" key={ filter.selectedColumn }>
+            <p>{filter.selectedColumn}</p>
+            <p>{filter.comparisons}</p>
+            <p>{filter.comparisonsValue}</p>
+            <button
+              type="button"
+              onClick={ () => handleRemoveFilter(filter.selectedColumn) }
+            >
+              X
+            </button>
+          </div>
+        ))}
+
+        <button
+          data-testid="button-remove-filters"
+          onClick={ handleRemoveAllFilters }
+        >
+          Remover todas filtragens
+        </button>
+
       </div>
 
       <input

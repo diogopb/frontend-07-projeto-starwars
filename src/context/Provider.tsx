@@ -3,7 +3,7 @@ import Context from './Context';
 import { PlanetType } from '../utils/types';
 
 function Provider({ children }: { children: React.ReactNode }) {
-  const [data, setData] = useState<PlanetType[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [searched, setSearched] = useState<PlanetType[]>(data);
   const [columns, setColumns] = useState([
@@ -16,6 +16,7 @@ function Provider({ children }: { children: React.ReactNode }) {
   const [selectedColumn, setSelectedColumn] = useState(columns[0]);
   const [comparisons, setComparisons] = useState('maior que');
   const [comparisonsValue, setComparisonsValue] = useState(0);
+  const [filters, setFilters] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -66,6 +67,54 @@ function Provider({ children }: { children: React.ReactNode }) {
     console.log('filteredColumns', filteredColumns);
     setSearched(filteredColumns);
     handleColumns();
+    const newFilter = {
+      selectedColumn,
+      comparisons,
+      comparisonsValue,
+    };
+    setFilters([...filters, newFilter]);
+  };
+
+  const handleRemoveFilter = (filter: any) => {
+    const newFilters = filters.filter((item) => item.selectedColumn !== filter);
+    setFilters(newFilters);
+    setColumns([...columns, filter]);
+
+    const remainingColumns = newFilters.map((e: any) => e.selectedColumn);
+    setColumns([...columns, ...remainingColumns]);
+
+    if (newFilters.length === 0) {
+      setSearched(data);
+    }
+
+    let newData = [...data];
+    newFilters.forEach((item) => {
+      newData = newData.filter((planet) => {
+        const value = Number(planet[item.selectedColumn]);
+        const comparison = Number(item.comparisonsValue);
+
+        if (item.comparisons === 'maior que') {
+          return value > comparison;
+        } if (item.comparisons === 'menor que') {
+          return value < comparison;
+        }
+        return value === comparison;
+      });
+    });
+
+    setSearched(newData);
+  };
+
+  const handleRemoveAllFilters = () => {
+    setFilters([]);
+    setColumns([
+      'population',
+      'orbital_period',
+      'diameter',
+      'rotation_period',
+      'surface_water',
+    ]);
+    setSearched(data);
   };
 
   const contextValue = {
@@ -85,6 +134,9 @@ function Provider({ children }: { children: React.ReactNode }) {
     setComparisonsValue,
     handleColumns,
     handleComparisons,
+    filters,
+    handleRemoveFilter,
+    handleRemoveAllFilters,
   };
 
   return (
