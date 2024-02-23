@@ -99,6 +99,7 @@ function Table() {
       <input
         type="text"
         data-testid="name-filter"
+        placeholder="Search by name..."
         onChange={ handleChange }
       />
       <table>
