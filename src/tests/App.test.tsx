@@ -1,25 +1,25 @@
-import { render, fireEvent } from '@testing-library/react';
-import Provider from '../context/Provider';
+import React from 'react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Table from '../components/Table';
+import Provider from '../context/Provider';
+import App from '../App';
 
-describe('Testes do componente Provider', () => {
-  test('verifica se o Provider renderiza corretamente', () => {
-    const { container } = render(
-      <Provider>
-        <div>Teste</div>
-      </Provider>
-    );
-    expect(container).toBeInTheDocument();
+test('renderiza a tabela corretamente', () => {
+  render(<App />);
+  
+  waitFor(() => {
+  expect(screen.getByText('StarWars')).toBeInTheDocument();
+  expect(screen.getByText('Alderaan')).toBeInTheDocument();
   });
 });
 
-describe('Testes do componente Table', () => {
-  test('verifica se a tabela renderiza corretamente', () => {
-    const { container } = render(
-      <Provider>
-        <Table />
-      </Provider>
-    );
-    expect(container).toBeInTheDocument();
-  });
+test('aplica filtro corretamente', () => {
+  render(<App />);
+  
+  fireEvent.change(screen.getByTestId('column-filter'), { target: { value: 'population' } });
+  fireEvent.change(screen.getByTestId('comparison-filter'), { target: { value: 'maior que' } });
+  fireEvent.change(screen.getByTestId('value-filter'), { target: { value: '1000' } });
+  fireEvent.click(screen.getByTestId('button-filter'));
+  fireEvent.click(screen.getByRole('button', { name: 'Filter' }));
 });
+
